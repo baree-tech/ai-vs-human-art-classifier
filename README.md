@@ -125,6 +125,13 @@ Developed by **Bareera Mushthak**, an AI developer passionate about combining ar
 Connect with me on [LinkedIn](https://www.linkedin.com/in/bareera-mushthak) | Explore more projects on [GitHub](https://github.com/baree-tech)
 
 ---
+---
+## 🙋 Feedback
+
+Let us know how well it performs on your own paintings!
+You can contribute or raise issues via [GitHub Issues](https://github.com/baree-tech/ai-vs-human-art-classifier/issues)
+
+---
 
 ## 📝 License
 

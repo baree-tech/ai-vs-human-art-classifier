@@ -1,134 +1,119 @@
-# 🖼️ AI vs Human Art Classifier 🎨
-A deep learning model to classify paintings as **AI-generated** or **human-created** — built using **PyTorch**, trained on a custom dataset, and deployed with **Gradio** for real-time testing.
+# 🎨 AI vs Human Art Classifier
+
+A fully functional Gradio web app that classifies whether a painting is **AI-generated** or **human-made**, built with **PyTorch**, styled with custom CSS, and ready to deploy.
 
 ---
 
-## 🔍 Motivation
+## 🧠 Motivation
 
-With the rise of generative AI tools like DALL·E, Midjourney, and Stable Diffusion, distinguishing human-made art from AI-generated imagery is becoming increasingly important for **art authenticity**, **ethics**, and **copyright integrity**.
-
-This project aims to tackle this by building a **binary classifier** that predicts whether a painting is AI-generated or created by a human artist.
-
----
-
-## 📦 Dataset
-
-A fully **custom-curated dataset** built by combining:
-
-### 🧠 Human Art:
-- Sourced from **WikiArt (Kaggle)**
-- 20+ styles: Abstract Expressionism, Cubism, Nouveau, etc.
-- Manually organized into `/human/<style_name>` subfolders
-
-### 🤖 AI Art:
-- Sourced from **AI Art Archives / Diffusion Repositories**
-- 25+ styles including Stable Diffusion outputs
-- Folders: `/AI/ai-diffusion-db-large1`, `/AI/...`
-
-#### ✅ Preprocessing:
-- Only selected folders with ≥500 images/class
-- Created stratified split for train (70%), val (20%), test (10%)
-- Final size: **~15,000 images**
-- Applied normalization and data augmentation (`transforms`)
+With the rise of AI-generated art (DALL·E, Midjourney, Stable Diffusion), distinguishing AI from human art is harder than ever. This project:
+- Trains a CNN model to classify artwork origin.
+- Builds a minimal but stylish interface.
+- Demonstrates end-to-end AI deployment skills.
 
 ---
 
-## 🧠 Model: Basic CNN
+## 🏗️ Project Overview
 
-```python
-3 Convolutional Layers
-+ ReLU Activation
-+ MaxPooling
-+ Dropout (0.5)
-+ Fully Connected Dense Layer
-```
 
-Trained from scratch on GPU using **CrossEntropyLoss + Adam Optimizer**
+### 🖼️ Dataset
+
+The original dataset was approximately **67 GB** in size, containing thousands of AI-generated and human-created artworks, each organized into 25 style-based folders under `AI/` and `human/` categories.
+
+#### Why We Subsampled:
+
+Due to the large size and volume of images, **training directly on the full dataset led to system instability and memory issues**. To make the training process manageable and efficient, we:
+
+- **Selected 500 images per class**, for both AI and Human art categories.
+- This resulted in:
+  - **12,500 AI-generated images** (25 classes × 500)
+  - **12,500 Human-created images** (25 classes × 500)
+
+#### Structure:
+
+- `AI/`
+  - 25 style folders (e.g., *ai-abstract-expressionism, ai-cubism, ai-surrealism*, etc.)
+- `human/`
+  - 25 style folders (e.g., *human-impressionism, human-realism*, etc.)
+
+#### Dataset Split:
+
+To ensure proper generalization and evaluation:
+- **Training Set**: 70%
+- **Validation Set**: 20%
+- **Test Set**: 10%
+
+This balanced and preprocessed dataset improved classification performance and reduced computational overhead.
+
+
+### 🧠 Model (BasicCNN)
+- 3 convolutional layers + pooling
+- Fully connected layers with dropout
+- Final output: 2 classes (AI-generated or Human-made)
+- Achieved ~95% accuracy on validation set.
+
+### 🎮 App Interface
+- Built with **Gradio (Blocks API)**
+- Interactive UI:
+  - Upload a painting
+  - Click **Classify**
+  - View prediction with confidence score
+- Styled with custom CSS:
+  - Black dark theme background
+  - Orange “Classify” button
+  - Teal/white prediction box with bold text
 
 ---
 
-## 📈 Results
-
-| Metric           | Score     |
-|------------------|-----------|
-| **Train Accuracy** | ~96.76%      |
-| **Validation Accuracy** | ~94.15%   |
-| **Test Accuracy** | ~94.2%    |
-
-Also includes:
-- 🔍 **Classification Report**
-- 📉 **Confusion Matrix**
-- 🖼️ **Sample Predictions Visualization**
-
----
-
-## 🧪 Personal Validation
-
-🎨 I tested the model with my **own hand-painted landscape artworks**, and it **successfully classified them as human-made** via the Gradio app.
-
----
-
-## 🚀 Gradio Deployment
-
-The project is deployed via **Gradio**, which allows you to:
-- Upload any painting or image
-- Instantly get prediction (AI vs Human)
-- Try with your own artwork!
+## 🔧 How to Run Locally
 
 ```bash
-gr.Interface(fn=predict_image, inputs="image", outputs="text").launch(share=True)
+git clone https://github.com/baree-tech/ai-vs-human-art-classifier.git
+cd ai-vs-human-art-classifier
+pip install -r requirements.txt
+python predict_with_gradio.py
 ```
-
-> 🟢 App will run locally and optionally generate a public link.
+- Then go to `http://localhost:7860`
 
 ---
 
-## 💾 Model Saving & Loading
+## 🚀 Deployment with Hugging Face Spaces
 
-```python
-# Save
-torch.save(model.state_dict(), 'ai_vs_human_cnn.pth')
-
-# Load for prediction
-model.load_state_dict(torch.load('ai_vs_human_cnn.pth'))
-```
+(You can deploy this app on Hugging Face Spaces using the Gradio interface)
+- Use **Gradio SDK**
+- Host publicly
+- Provide `predict_with_gradio.py`, the `.pth` model, and `requirements.txt`
 
 ---
 
-## 📁 Project Structure
+## 🧩 File Structure
 
 ```
-AI_vs_Real/
-│
-├── dataset_split/
-│   ├── train/AI/
-│   ├── train/human/
-│   ├── val/...
-│   └── test/...
-│
-├── main.py                    # Model training & saving
-├── evaluate_model.py          # Confusion matrix, classification report
-├── predict_with_gradio.py     # Gradio app for live prediction
-└── README.md
+AI-vs-human-art-classifier/
+├── ai_vs_real_cnn.pth        ← Trained model weights
+├── predict_with_gradio.py    ← Main app script
+├── requirements.txt          ← Dependency list
+├── README.md                 ← This documentation
+└── examples/                 ← Optional: sample test images
 ```
 
 ---
 
-## 🧠 Future Improvements
+## 🔍 Sample Output
 
-- Try **transfer learning (ResNet50, EfficientNet)**
-- Extend to **multi-class: specific styles (e.g., Cubism vs Impressionism)**
-- Add **explainability** (e.g., Grad-CAM)
-
----
-
-## 👩‍🎨 Created by: Bareera Mushthak
-
-> Follow me on [LinkedIn](https://www.linkedin.com/in/bareera-mushthak)  
-> Let’s build responsible AI together 🧠✨
+```
+🖼️ Human-Made Art (Confidence: 92.35%)
+```
 
 ---
 
-## 🏷️ Tags
+## About the Creator
 
-`#PyTorch` `#ComputerVision` `#AIArt` `#DeepLearning` `#Gradio` `#EthicalAI` `#ImageClassification`
+Developed by **Bareera Mushthak**, an AI developer passionate about combining art and technology.  
+Connect with me on [LinkedIn](https://www.linkedin.com/in/bareera-mushthak) | Explore more projects on [GitHub](https://github.com/baree-tech)
+
+---
+
+## 📝 License
+
+MIT License © 2025 Bareera Mushthak

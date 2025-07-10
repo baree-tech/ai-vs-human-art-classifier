@@ -62,6 +62,18 @@ This balanced and preprocessed dataset improved classification performance and r
   - Black dark theme background
   - Orange “Classify” button
   - Teal/white prediction box with bold text
+  - 
+### 📁 Project Structure
+
+| File / Folder           | Purpose |
+|-------------------------|---------|
+| `PrepareDataset.py`     | Script to preprocess the dataset by resizing and organizing it into training, validation, and test folders |
+| `Main.py`               | Main training script that builds and trains the CNN on the processed dataset |
+| `EvaluateModel.py`      | Evaluates the trained model and prints accuracy, classification report, confusion matrix, etc. |
+| `app.py`                | Gradio interface script to run the app for AI vs Human artwork classification (renamed from `Predict_with_gradio.py`) |
+| `ai_vs_real_cnn.pth`    | Trained PyTorch model (excluded from GitHub due to size; loaded separately on Hugging Face) |
+| `requirements.txt`      | Contains Python dependencies needed for running and deploying the project |
+| `README.md`             | Project documentation and explanation |
 
 ---
 
